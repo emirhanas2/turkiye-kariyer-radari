@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Türkiye genelindeki kariyer ve staj ilanlarını tek ekranda takip eden açık kaynak yerel web paneli.">
+  <title>Ride · Kariyer paneli</title>
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <div class="brand">R<span>·</span> / RIDE</div>
+      <span class="local">● Veriler bu bilgisayarda</span>
+    </header>
+
+    <section class="hero">
+      <div>
+        <p id="radar-title" class="eyebrow">KARİYER RADARI</p>
+        <h1>Bir sonraki adımın<br>burada başlayabilir.</h1>
+        <p class="intro">İlanları tek yerde takip et. İlgini çeken fırsatı seç,<br>başvurunu kaynağında tamamla.</p>
+      </div>
+      <div class="metric">
+        <strong id="count">—</strong>
+        <span>toplanan ilan</span>
+        <small id="last">İlk tarama bekleniyor</small>
+      </div>
+    </section>
+
+    <section class="location-panel">
+      <div>
+        <p class="eyebrow">ARAMA KONUMU</p>
+        <h2>Şehrini seç veya tüm Türkiye'yi tara</h2>
+      </div>
+      <div class="location-controls">
+        <input id="location" list="city-options" maxlength="60" placeholder="İstanbul veya Tüm Türkiye" aria-label="Arama konumu">
+        <datalist id="city-options"></datalist>
+        <button id="apply-location">Konumu uygula</button>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-heading"><h2>Kaynaklar</h2><button id="scan">Şimdi güncelle ↻</button></div>
+      <div id="sources" class="sources" aria-live="polite"></div>
+      <p class="note">Kaynak sekmeleri açık olmak zorunda değil. Bilgisayar ve yerel sunucu açıkken 15 dakikada bir yenilenir.</p>
+    </section>
+
+    <section class="results">
+      <div class="section-heading"><h2>Fırsatlarını keşfet <span id="visible"></span></h2><span id="message" role="status"></span></div>
+      <div class="filters">
+        <input id="search" placeholder="Pozisyon veya şirket ara…" aria-label="İlan ara">
+        <select id="source" aria-label="Kaynak"><option value="">Tüm kaynaklar</option></select>
+        <label><input type="checkbox" id="relevant"> Kariyer alanlarımla eşleşenler</label>
+      </div>
+      <p class="note">İnsan kaynakları, kurumsal iletişim, muhabirlik, gazete/dergi editörlüğü, sosyal medya, içerik, reklam ve genel staj programları önerilir. Koşulları ilan detayından doğrula.</p>
+      <div id="jobs" class="jobs"></div>
+      <button id="more" class="more" hidden>Daha fazla ilan göster</button>
+    </section>
+
+    <footer>RIDE / Açık kaynak kariyer paneli <span>Veriler yerelde saklanır · Otomatik başvuru yapılmaz</span></footer>
+  </main>
+  <script src="/app.js" type="module"></script>
+</body>
+</html>

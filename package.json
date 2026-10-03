@@ -1,0 +1,13 @@
+{
+  "name": "turkiye-kariyer-radari",
+  "version": "1.0.0",
+  "description": "Türkiye genelindeki iş ve staj ilanlarını tek ekranda toplayan açık kaynak yerel kariyer paneli.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test --test-isolation=none"
+  },
+  "engines": { "node": ">=20" },
+  "license": "MIT"
+}
