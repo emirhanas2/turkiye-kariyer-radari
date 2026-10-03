@@ -17,8 +17,11 @@
 - Genel staj, uzun dönem staj, intern, trainee ve genç yetenek programlarını önerir.
 - Senior, müdür, director, manager, lead ve benzeri yönetici ilanlarını öneri listesinden çıkarır.
 - Bir ilana tıklayınca başvuru için gerçek kaynak sayfasını açar.
+- İlanları **Kaydet**, **Başvurdum** ve **Gizle** olarak işaretlemeyi destekler.
+- Her ilana kişisel not ekler; kaydedilen, başvurulan ve gizlenen ilanları ayrı ayrı filtreler.
+- Başvuru geçmişini tarih, şirket, pozisyon, not ve bağlantı bilgileriyle CSV olarak indirir.
 - Başlangıçta ve 15 dakikada bir otomatik tarama yapar.
-- Sonuçları ve seçilen konumu yalnızca yerel `data/` klasöründe saklar.
+- Sonuçları, seçilen konumu ve başvuru takibini yalnızca yerel `data/` klasöründe saklar.
 
 ## Hızlı başlangıç
 
@@ -47,8 +50,10 @@ Sonra `http://127.0.0.1:4310` adresini aç.
 1. Arama konumuna bir il adı veya `Tüm Türkiye` yaz.
 2. **Konumu uygula** düğmesine bas.
 3. Kaynak kartlarından tarama durumunu takip et.
-4. Arama, kaynak ve kariyer alanı filtrelerini kullan.
+4. Arama, kaynak, durum ve kariyer alanı filtrelerini kullan.
 5. **İlanı incele** bağlantısıyla başvuruyu kaynak sitede tamamla.
+6. Panele dönüp **Başvurdum** düğmesine bas; gerekirse ilana not ekle.
+7. Yedek almak veya başvuruları Excel'de açmak için **Başvuruları CSV indir** bağlantısını kullan.
 
 Konum değiştiğinde önceki konumun sonuçları temizlenir ve yeni tarama otomatik başlar.
 
@@ -63,7 +68,7 @@ Kaynakların herkese açık arama sayfaları
        URL doğrulama ve tekilleştirme
                     │
                     ▼
-          data/listings.json
+    data/listings.json + activity.json
                     │
                     ▼
        http://127.0.0.1:4310 paneli

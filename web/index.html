@@ -21,10 +21,13 @@
         <h1>Bir sonraki adımın<br>burada başlayabilir.</h1>
         <p class="intro">İlanları tek yerde takip et. İlgini çeken fırsatı seç,<br>başvurunu kaynağında tamamla.</p>
       </div>
-      <div class="metric">
-        <strong id="count">—</strong>
-        <span>toplanan ilan</span>
-        <small id="last">İlk tarama bekleniyor</small>
+      <div class="metrics">
+        <div class="metric"><strong id="count">—</strong><span>toplanan ilan</span><small id="last">İlk tarama bekleniyor</small></div>
+        <div class="mini-metrics">
+          <div><strong id="matched-count">—</strong><span>eşleşen</span></div>
+          <div><strong id="saved-count">0</strong><span>kaydedilen</span></div>
+          <div><strong id="applied-count">0</strong><span>başvurulan</span></div>
+        </div>
       </div>
     </section>
 
@@ -47,10 +50,11 @@
     </section>
 
     <section class="results">
-      <div class="section-heading"><h2>Fırsatlarını keşfet <span id="visible"></span></h2><span id="message" role="status"></span></div>
+      <div class="section-heading"><h2>Fırsatlarını keşfet <span id="visible"></span></h2><div class="heading-actions"><span id="message" role="status"></span><a class="export" href="/api/export.csv" download>Başvuruları CSV indir ↓</a></div></div>
       <div class="filters">
         <input id="search" placeholder="Pozisyon veya şirket ara…" aria-label="İlan ara">
         <select id="source" aria-label="Kaynak"><option value="">Tüm kaynaklar</option></select>
+        <select id="status" aria-label="Başvuru durumu"><option value="active">Aktif ilanlar</option><option value="saved">Kaydedilenler</option><option value="applied">Başvurulanlar</option><option value="unapplied">Başvurulmayanlar</option><option value="hidden">Gizlenenler</option></select>
         <label><input type="checkbox" id="relevant"> Kariyer alanlarımla eşleşenler</label>
       </div>
       <p class="note">İnsan kaynakları, kurumsal iletişim, muhabirlik, gazete/dergi editörlüğü, sosyal medya, içerik, reklam ve genel staj programları önerilir. Koşulları ilan detayından doğrula.</p>

@@ -3,11 +3,13 @@ import { readFile, writeFile, mkdir, rename } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
 import { createSources, collect } from "./collector.js";
+import { activityStats, appliedCsv, updateActivity } from "./activity.js";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
 const dataDir = join(root, "data");
 const listingsFile = join(dataDir, "listings.json");
 const settingsFile = join(dataDir, "settings.json");
+const activityFile = join(dataDir, "activity.json");
 await mkdir(dataDir, { recursive: true });
 
 let settings = { location: "İstanbul" };
@@ -17,11 +19,18 @@ try {
   const saved = JSON.parse(await readFile(listingsFile, "utf8"));
   if (saved.location === settings.location) state = { ...state, ...saved, scanning: false };
 } catch (error) { if (error.code !== "ENOENT") console.error("Kayıt okunamadı:", error.message); }
+let activity = {};
+try { activity = JSON.parse(await readFile(activityFile, "utf8")); } catch (error) { if (error.code !== "ENOENT") console.error("Başvuru kayıtları okunamadı:", error.message); }
 
 let pending;
 async function persistState() {
   await writeFile(join(dataDir, "listings.tmp"), JSON.stringify(state, null, 2));
   await rename(join(dataDir, "listings.tmp"), listingsFile);
+}
+
+async function persistActivity() {
+  await writeFile(join(dataDir, "activity.tmp"), JSON.stringify(activity, null, 2));
+  await rename(join(dataDir, "activity.tmp"), activityFile);
 }
 
 function scan() {
@@ -80,7 +89,13 @@ const server = http.createServer(async (request, response) => {
 
   if (request.method === "GET" && path === "/api/state") {
     response.setHeader("Content-Type", "application/json; charset=utf-8");
-    response.end(JSON.stringify(state));
+    response.end(JSON.stringify({ ...state, activity, activityStats: activityStats(activity) }));
+    return;
+  }
+  if (request.method === "GET" && path === "/api/export.csv") {
+    response.setHeader("Content-Type", "text/csv; charset=utf-8");
+    response.setHeader("Content-Disposition", 'attachment; filename="basvurular.csv"');
+    response.end(appliedCsv(activity));
     return;
   }
   if (request.method === "POST" && path === "/api/scan") {
@@ -100,6 +115,24 @@ const server = http.createServer(async (request, response) => {
       state = { jobs: [], sources: [], lastScan: null, scanning: false, location: settings.location };
       scan();
       response.writeHead(202, { "Content-Type": "application/json" }).end(JSON.stringify({ location: settings.location, started: true }));
+    } catch (error) {
+      response.writeHead(400, { "Content-Type": "application/json" }).end(JSON.stringify({ error: error.message }));
+    }
+    return;
+  }
+  if (request.method === "POST" && path === "/api/activity") {
+    if (request.headers.origin !== origin) { response.writeHead(403).end(); return; }
+    try {
+      const body = await readJsonBody(request);
+      if (typeof body.url !== "string" || body.url.length > 2000) throw new Error("Geçersiz ilan bağlantısı");
+      const parsedUrl = new URL(body.url);
+      if (parsedUrl.protocol !== "https:") throw new Error("Geçersiz ilan bağlantısı");
+      const job = state.jobs.find((item) => item.url === body.url);
+      if (!job && !activity[body.url]) throw new Error("İlan bulunamadı");
+      activity = updateActivity(activity, body, job);
+      await persistActivity();
+      response.setHeader("Content-Type", "application/json; charset=utf-8");
+      response.end(JSON.stringify({ entry: activity[body.url] || null, stats: activityStats(activity) }));
     } catch (error) {
       response.writeHead(400, { "Content-Type": "application/json" }).end(JSON.stringify({ error: error.message }));
     }
